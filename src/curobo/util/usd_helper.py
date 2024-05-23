@@ -930,6 +930,11 @@ class UsdHelper:
             usd_exists = False
         if not usd_exists:
             log_info("robot usd not found, using urdf animation instead")
+            robot_model_file = load_yaml(join_path(get_robot_configs_path(), robot_model_file))
+            if "robot_cfg" in robot_model_file:
+                robot_model_file = robot_model_file["robot_cfg"]
+            robot_model_file["kinematics"]["load_link_names_with_mesh"] = True
+
             robot_model_file["kinematics"]["use_usd_kinematics"] = False
             return UsdHelper.write_trajectory_animation(
                 robot_model_file,
